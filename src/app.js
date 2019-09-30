@@ -10,11 +10,9 @@ function set(key, value) {
 }
 
 function unset(key) {
-  delete console.log("unset", key);
   const unsetSecrets = readSecrets();
   delete unsetSecrets[key];
   writeSecrets(unsetSecrets);
-  console.log(unsetSecrets);
 }
 
 function get(key) {
