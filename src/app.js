@@ -1,38 +1,29 @@
-const { readSecrets, writeSecrets } = require("./models/secrets");
+const readline = require("readline");
+
+const { executeCommand } = require("./lib/commands");
 
 const userArgv = process.argv.slice(2);
 const [action, key, value] = userArgv;
 
-function set(key, value) {
-  const secrets = readSecrets();
-  secrets[key] = value; // z.b pin: 1234
-  writeSecrets(secrets);
-}
-
-function unset(key) {
-  const unsetSecrets = readSecrets();
-  delete unsetSecrets[key];
-  writeSecrets(unsetSecrets);
-}
-
-function get(key) {
-  const secrets = readSecrets();
-
-  const secret = secrets[key];
-  console.log(secret);
-}
-// solution 1
-switch (action) {
-  case "get":
-    get(key);
-    break;
-  case "set":
-    set(key, value);
-    break;
-  case "unset":
-    unset(key);
-    break;
-}
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+const masterPassword = "abc";
+rl.question("What is the master password?", password => {
+  rl.output.write("\n"); //  \n gives one space " password"
+  console.log(`Thank your for your password ${password}`);
+  if (password === masterPassword) {
+    executeCommand(action, key, value);
+  } else {
+    console.log("invalid password");
+  }
+  rl.close();
+});
+// Override default output to hide password with ****
+rl._writeToOutput = function _writeToOutput() {
+  rl.output.write("*");
+};
 
 // solution 2
 
