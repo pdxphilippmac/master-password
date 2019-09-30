@@ -14,10 +14,11 @@ function readSecrets() {
 }
 
 function writeSecrets(secrets) {
-  fs.writeFileSync("secrets.json", JSON.stringify(secrets));
-
-  console.log("Write secrets", secrets);
+  fs.writeFileSync(fileName, JSON.stringify(secrets));
 }
 
 exports.readSecrets = readSecrets;
 exports.writeSecrets = writeSecrets;
+
+// fs.appendFileSync write file without override
+// oder flagen {flag: "a"}
