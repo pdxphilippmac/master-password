@@ -27,6 +27,7 @@ function get(password, key) {
   decryptedSecret += cryptoKey.final("utf8");
 
   console.log(decryptedSecret);
+  return decryptedSecret;
 }
 // solution 1
 const commands = {
@@ -40,5 +41,5 @@ exports.executeCommand = function executeCommand(password, action, key, value) {
   if (!command) {
     throw new Error("unknown action");
   }
-  command(password, key, value);
+  return command(password, key, value);
 };
