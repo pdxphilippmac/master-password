@@ -1,18 +1,24 @@
 // create webserver
 const http = require("http");
-const { executeCommand } = require("./lib/commands");
+const { get } = require("./lib/commands");
 
 const server = http.createServer(function(request, response) {
+  // use url.parse to seperate url to pathname and search
   if (request.url === "/favicon.ico") {
     return response.end();
   }
+  if (request.url === "/") {
+    return response.end("Welcome to my Password Manager");
+  }
+  console.log(request.url);
 
-  console.log("Requested", request.url);
-  if (request.url === "/pin") {
-    const secret = executeCommand("asd", "get", "pin");
+  try {
+    const path = request.url.slice(1);
+    const secret = get("asd", path);
+
     response.write(secret);
-  } else {
-    response.write("Unknown URL");
+  } catch (error) {
+    response.write("Can not read secret");
   }
 
   response.end();

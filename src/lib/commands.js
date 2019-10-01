@@ -43,3 +43,5 @@ exports.executeCommand = function executeCommand(password, action, key, value) {
   }
   return command(password, key, value);
 };
+
+exports.get = get;
