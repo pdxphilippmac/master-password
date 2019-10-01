@@ -1,6 +1,6 @@
 const readline = require("readline");
 const crypto = require("crypto");
-const { readHash } = require("./createHash");
+// const { readHash } = require("./createHash");
 const fs = require("fs");
 
 const { executeCommand } = require("./lib/commands");
@@ -13,7 +13,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-const masterPasswordHash = fs.readFileSync("hash.json", "utf-8");
+const masterPasswordHash = fs.readFileSync(".password", "utf-8");
 
 rl.question("What is the master password?", password => {
   rl.output.write("\n"); //  \n gives one space " password"

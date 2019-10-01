@@ -12,17 +12,5 @@ function hashPassword(password) {
   return [salt, hash].join("$");
 }
 
-console.log(hashPassword(process.argv[2]));
-
-function readHash() {
-  const hashJSON = fs.readFileSync(hashFileName, "utf-8");
-  const hash = JSON.parse(hashJSON);
-  return hash;
-}
-
-function writeHash(hash) {
-  fs.writeFileSync(hashFileName, JSON.stringify(hash));
-}
-
-exports.readHash = readHash;
-exports.writeHash = writeHash;
+const hashedPassword = hashPassword(process.argv[2]);
+fs.writeFileSync(".password", hashedPassword);
