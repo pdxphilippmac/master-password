@@ -1,27 +1,35 @@
 // create webserver
 const http = require("http");
-const { get } = require("./lib/commands");
 const url = require("url");
+const fs = require("fs");
+const { get } = require("./lib/commands");
 
 const server = http.createServer(function(request, response) {
-  if (request.url === "/favicon.ico") {
+  const { pathname } = url.parse(request.url);
+
+  if (pathname === "/favicon.ico") {
+    response.writeHead(404);
     return response.end();
   }
-  if (request.url === "/") {
-    return response.end("Welcome to my secrets manager");
+  if (pathname === "/") {
+    response.writeHead(200, { "Content-Type": "text/html" });
+    const content = fs.readFileSync("src/view/index.html", "utf-8");
+    return response.end(content);
   }
+
+  console.log(pathname);
   try {
-    const path = request.url.slice(1);
-    const URLobject = url.parse(path);
-    console.log(path);
-    console.log(URLobject);
-    const secret = get("asd", URLobject.pathname);
+    const path = pathname.slice(1);
+    const secret = get("asd", path);
+
     response.write(secret);
   } catch (error) {
     response.write("Can not read secret");
   }
+
   response.end();
 });
+
 server.listen(8080, () => {
   console.log("Server listens on http://localhost:8080");
 });
