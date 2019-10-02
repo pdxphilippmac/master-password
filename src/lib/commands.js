@@ -44,3 +44,5 @@ exports.executeCommand = function executeCommand(password, action, key, value) {
 };
 
 exports.get = get;
+exports.set = set;
+exports.unset = unset;

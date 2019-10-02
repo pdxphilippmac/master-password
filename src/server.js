@@ -2,10 +2,12 @@
 const http = require("http");
 const url = require("url");
 const fs = require("fs");
-const { get } = require("./lib/commands");
+const { get, set } = require("./lib/commands");
 
 const server = http.createServer(function(request, response) {
   const { pathname } = url.parse(request.url);
+
+  console.log(pathname, request.method);
 
   if (pathname === "/favicon.ico") {
     response.writeHead(404);
@@ -17,12 +19,15 @@ const server = http.createServer(function(request, response) {
     return response.end(content);
   }
 
-  console.log(pathname);
   try {
     const path = pathname.slice(1);
-    const secret = get("asd", path);
-
-    response.write(secret);
+    if (request.method === "GET") {
+      const secret = get("asd", path);
+      response.write(secret);
+    } else if (request.method === "POST") {
+      set("asd", path, Date.now().toString());
+      response.write(`Set ${path} value`);
+    }
   } catch (error) {
     response.write("Can not read secret");
   }
