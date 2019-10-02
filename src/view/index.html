@@ -6,21 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Master Password</title>
   </head>
-  <h1>Welcome to Master Password</h1>
-  <input type="text" id="secretInput" placeholder="Enter secret name" />
-  <button id="submit">Get Secret</button>
-  <script>
-    const secretInput = document.querySelector("#secretInput");
-    const submit = document.querySelector("#submit");
+  <body>
+    <h1>Welcome to Master Password</h1>
+    <input type="text" placeholder="Type yor pin" id="first" />
+    <!-- <input type="text" placeholder="Type your value" id="second" /> -->
+    <button id="execute">Get Secret</button>
+    <span id="result"></span>
+    <script>
+      function handleClick() {
+        console.log(valueOfInputField.value);
+        result.innerHTML = valueOfInputField.value;
+        const password = valueOfInputField.value;
 
-    function handleClick() {
-      console.log(secretInput.value);
-      const divElement = document.createElement("div");             
-        divElement.innerText = `This is the password: ${secretInput.value} ` ;               
-        document.body.appendChild(divElement);
+        fetch(`http://localhost:8080/${password}`).then(function(response) {
+          return response.text().then(function(text) {
+            result.innerHTML = text;
+            console.log(result);
+          });
+        });
+      }
 
-    }
-    submit.addEventListener("click", handleClick);
-  </script>
+      const valueOfInputField = document.querySelector("#first");
+      const buttonValue = document.querySelector("#execute");
+      let result = document.querySelector("#result");
+
+      buttonValue.addEventListener("click", handleClick);
+    </script>
   </body>
 </html>
