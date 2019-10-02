@@ -26,7 +26,6 @@ function get(password, key) {
   let decryptedSecret = cryptoKey.update(secret, "hex", "utf8");
   decryptedSecret += cryptoKey.final("utf8");
 
-  console.log(decryptedSecret);
   return decryptedSecret;
 }
 // solution 1

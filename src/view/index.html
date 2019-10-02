@@ -8,29 +8,54 @@
   </head>
   <body>
     <h1>Welcome to Master Password</h1>
-    <input type="text" placeholder="Type yor pin" id="first" />
-    <!-- <input type="text" placeholder="Type your value" id="second" /> -->
-    <button id="execute">Get Secret</button>
-    <span id="result"></span>
+    <form id="submitForm">
+      <input type="text" placeholder="Type your pin" id="inputField" />
+      <!-- <input type="text" placeholder="Type your value" id="second" /> -->
+      <button>Get Secret</button>
+    </form>
+
+    <!-- Second form -->
+    <form id="setSecretForm">
+      <input id="key" type="text" />
+      <input id="value" type="password" />
+      <button>Set Secret</button>
+    </form>
+
     <script>
-      function handleClick() {
-        console.log(valueOfInputField.value);
+      const submitForm = document.querySelector("#submitForm");
+      const valueOfInputField = document.querySelector("#inputField");
+      const buttonValue = document.querySelector("#submit");
+
+      // second form
+
+      const inputCategory = document.querySelector("#key");
+      const inputKey = document.querySelector("#key");
+      const inputValue = document.querySelector("#value");
+      const setSecretForm = document.querySelector("#setSecretForm");
+
+      function handleSubmit() {
+        event.preventDefault(event);
         result.innerHTML = valueOfInputField.value;
         const password = valueOfInputField.value;
-
-        fetch(`http://localhost:8080/${password}`).then(function(response) {
+        fetch(`/${password}`).then(function(response) {
           return response.text().then(function(text) {
             result.innerHTML = text;
-            console.log(result);
           });
         });
       }
 
-      const valueOfInputField = document.querySelector("#first");
-      const buttonValue = document.querySelector("#execute");
       let result = document.querySelector("#result");
 
-      buttonValue.addEventListener("click", handleClick);
+      submitForm.addEventListener("submit", handleSubmit);
+
+      function handleCreate() {
+        event.preventDefault();
+        const secret = {};
+        secret[inputKey.value] = inputValue.value;
+        console.log(secret);
+      }
+
+      setSecretForm.addEventListener("submit", handleCreate);
     </script>
   </body>
 </html>
