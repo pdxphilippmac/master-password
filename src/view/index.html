@@ -6,7 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Master Password</title>
   </head>
-  <body>
-    <h1>Welcome to Master Password!</h1>
+  <h1>Welcome to Master Password</h1>
+  <input type="text" id="secretInput" placeholder="Enter secret name" />
+  <button id="submit">Get Secret</button>
+  <script>
+    const secretInput = document.querySelector("#secretInput");
+    const submit = document.querySelector("#submit");
+
+    function handleClick() {
+      console.log(secretInput.value);
+      const divElement = document.createElement("div");             
+        divElement.innerText = `This is the password: ${secretInput.value} ` ;               
+        document.body.appendChild(divElement);
+
+    }
+    submit.addEventListener("click", handleClick);
+  </script>
   </body>
 </html>
