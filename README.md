@@ -1,3 +1,5 @@
+![Alt text](/src/ressources/Screenshot 2019-10-02 at 16.39.51.png)
+
 # Master-Password
 
 - Exercise with node to write, save and delete passwords within the command shell.
