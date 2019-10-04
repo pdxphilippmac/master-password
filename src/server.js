@@ -1,13 +1,13 @@
-// create webserver
 const http = require("http");
 const url = require("url");
 const fs = require("fs");
-const { get, set } = require("./lib/commands");
+const { initDatabase } = require("./lib/database");
 
-const server = http.createServer(function(request, response) {
+const { get, set, unset } = require("./lib/commands");
+
+const server = http.createServer(async function(request, response) {
   const { pathname } = url.parse(request.url);
-
-  console.log(pathname, request.method);
+  console.log(request.url, request.method);
 
   if (pathname === "/favicon.ico") {
     response.writeHead(404);
@@ -22,95 +22,32 @@ const server = http.createServer(function(request, response) {
   try {
     const path = pathname.slice(1);
     if (request.method === "GET") {
-      const secret = get("asd", path);
+      const secret = await get("asd", path);
       response.end(secret);
-    } else if (request.method == "POST") {
-      console.log("POST");
+    } else if (request.method === "POST") {
       let body = "";
       request.on("data", function(data) {
         body += data;
         console.log("Partial body: " + body);
       });
-      request.on("end", function() {
+      request.on("end", async function() {
         console.log("Body: " + body);
-        set("asd", path, body);
-
+        await set("asd", path, body);
         response.end(`Set ${path}`);
       });
+    } else if (request.method === "DELETE") {
+      await unset("asd", path);
+      response.end(`Delete ${path}`);
     }
   } catch (error) {
     response.end("Can not read secret");
   }
 });
 
-server.listen(8080, () => {
-  console.log("Server listens on http://localhost:8080");
+initDatabase().then(() => {
+  console.log("Database connected");
+
+  server.listen(8080, () => {
+    console.log("Server listens on http://localhost:8080");
+  });
 });
-
-// const address = "http://localhost:3000";
-// const parsedURL = url.parse(address, true, false);
-// console.log(`this is host ` + parsedURL.host);
-// console.log(`this is pathname` + parsedURL.pathname);
-// console.log(`this is path ` + parsedURL.path);
-
-// const server = http.createServer(function(request, response) {
-// use url.parse to seperate url to pathname and search#
-//
-// //
-// request.url.parse(
-//   urlStr,
-//   (parseQueryString = false),
-//   (slashesDenoteHost = false)
-// );
-
-// url.parse(request.url).pathname;
-
-//
-
-//
-// OLD VERSION START
-
-//   if (request.url === "/favicon.ico") {
-//     return response.end();
-//   }
-//   if (request.url === "/") {
-//     return response.end("Welcome to my Password Manager");
-//   }
-//   console.log(request.url);
-
-//   try {
-//     const path = request.url.slice(1);
-//     const secret = get("asd", path);
-//     const parsedPath = url.parse(path);
-//     const pathName = parsedPath.pathname;
-//     console.log(pathName);
-
-//     response.write(secret);
-//   } catch (error) {
-//     response.write("Can not read secret");
-//   }
-
-//   response.end();
-// });
-
-// server.listen(7000);
-
-// OLD VERSION END
-
-// READ FILE
-
-// const url = require("url");
-
-// var fs = require("fs");
-
-// http
-//   .createServer(function(req, res) {
-//     fs.readFile("secrets.js", "utf8", function(err, contents) {
-//       res.writeHead(200, { "Content-Type": "text/plain" });
-//       res.write(contents);
-//       res.end();
-//     });
-//   })
-
-//   .listen(7000);
-// console.log("Server started");
