@@ -47,7 +47,7 @@ const server = http.createServer(async function(request, response) {
 initDatabase().then(() => {
   console.log("Database connected");
 
-  server.listen(8080, () => {
-    console.log("Server listens on http://localhost:8080");
+  server.listen(8090, () => {
+    console.log("Server listens on http://localhost:8090");
   });
 });
